@@ -165,4 +165,107 @@ lsblk
 
 LightGBM/XGBoost/CatBoost : ml algorithms gradient boosted transperency
 
+ssh : connect to you instance 
+
+git curl build-essential ufw 
+
+pm2 : opensource tool to run nodejs weabpplication like backend
+
+pm2 start npm --name backend -- run start
+
+pm2 save
+
+
+build fronted : 
+
+npm run build
+
+npm install -g serve
+
+pm2 start "serve -s build -l 3000" --name fontend 
+
+pm2 save
+
+
+setup rever proxy with ngnix : 
+
+
+sudo apt install ngnix -y 
+
+
+sudo nano /etc/ngnix/site-available/lostfound
+
+add this config (backend on port 5000 and frontend on 3000
+
+enable site :
+
+sudo ln -s /etc/ngnix/site-available/lostfound /etc/ngnix/site-enabled/
+
+sudo ngnix -t 
+
+sudo systemctl restart ngnix
+
+enable firewall :
+
+sudo ufw allow OpenSSH
+
+sudo ufw allow 'Ngnix Full'
+
+sudo ufw enable
+
+add ssl with encypt :
+
+
+sudo apt install certbot python3-certbot-ngnix -y 
+
+sudo certbot --ngnix -d youdomain.com 
+
+permission denied(public key) :
+
+
+ls -al ~/.ssh 
+
+generate new key 
+
+sshkeygen : used to generate key
+
+ssh-keygen -t ed34234 -C "athrva@gmal.com"
+
+add your public key to the instance:
+
+mkdir -p ~/.ssh 
+
+nano ~/.ssh/authorized_keys 
+
+paste the generated key
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+ssh into you instance 
+
+ssh -i ~/.ssh/id_ed25519 ubuntu@210.79.128.132
+
+install next js properly 
+
+npm install next react react-dom
+
+npm run dev
+
+adding the swap space 
+
+sudo fallocate -l 2G /swapfile
+
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+
+make it perment
+
+iecho '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+
 
