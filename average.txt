@@ -1,0 +1,168 @@
+for brightness : brightnessctl
+
+wpctl : for volume up/down and more
+
+mouse + mod : for hold you modifier key workspace one to another (firefox)
+
+Tauri plugins aren't properly installed or configured in react + tauri : 
+
+so , npm install @tauri-apps/plugin-shell
+
+#rust side
+
+cd src
+cargo add tauri-plugin-shell
+
+go build cmds:
+
+go build -o build/wipe_tool ./cmd/wipe
+
+rust + cargo : 
+
+step 1: install cargo + rust 
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+source $Home/.cargo/env
+
+rustc -v
+cargo -v
+
+
+tauri prerequisites: 
+
+sudo apt update
+
+sudo apt install build-essential libssl-dev pkg-config
+
+tauri cli:
+
+cargo install tauri-cli
+
+run tauri dev:
+
+npm install
+npm run tauri dev / tauri dev
+
+rust toolchain stable : 
+
+rustup default stable
+
+tauri plugin module error : 
+
+step 1: cargo.toml 
+
+tauri-plugin-opener = "2.5.0"
+
+cargo update
+npm install
+
+hdparm : ATA cmds
+
+wipe algorithms : dod 5220.22-m gutmann nist 800-88
+
+sgdisk : scsi devices 
+
+nvme-cli : nvme ssds 
+
+use digital signature : 
+
+use elliptic curve cyptography ecc : faster and lighter than rsa
+
+openssl
+libsodium
+
+audit trail : hash log of wipe operation
+
+data wipe cert : 
+
+device details 
+
+siping algorithms 
+
+cryptographic hash + digital signature 
+
+server verifing the json cert
+
+NIST SP 800-88 Rev 1 : Clear, Purge, Destroy
+
+for ssds : ata secure erase / crypto erase commands
+
+dod/gutmann wipes for enterprises
+
+tamper proff cert 
+
+blockchain ledger for enterprises verification, apis for recyclers : future hooks
+
+
+bypass locked devices : even if the os is currupted you  can still boot from usb and wipe
+
+full control of hardware ; acan access  storage direclty 
+
+buildroot / youcto project : create lightweight linux distro 
+
+this os boots super fast and only has drivers + librareies needed for disk wiping 
+
+why qt/gtk : lightweight qt : good for kiosks / tablets too and gtk : simpler, widely used in linux apps 
+
+libsodium : use in digital signature 
+
+hashing : sha-256 for wipe logs
+
+for gov level transperency : blockchain ledger (Hyperledger, Ethereum sidechai) for govt level transperency
+
+Svelte + tailwind css : tauri love this simple ui with just a few screeens  less boilerplate  clean ui 
+
+flutter + dart : desktop + mobile application 
+
+strong ecosystem for ui (material + cuperitino widgets)
+
+greate performance ( compiled, not webview)
+
+tailwind + daisyUI : quick component setup 
+
+
+ipc(inter-process communication): 
+
+listdevices()
+
+startwipe(device, method)
+
+getLogs()
+
+generateCertificate()
+
+WMI/DeviceIoControl APIs : For windows for device enumeration
+
+golang-go : 
+
+scaffold react + vite + tauri
+
+npm create vite@latest eraser-app -- -- template react
+
+cd eraser-app
+
+npm install
+
+initialize tauri : 
+
+npx tauri init 
+
+
+@tauri-apps/api : tauri js api
+
+gofpdf : certificate pdf 
+
+crypto/ecdsa : certificate for signing
+
+loopback/virtual disk
+
+dd if=/dev/zero of=virtual.img bs=1M count=100 #100MB file
+
+sudo losetup -fP virtual.img 
+
+lsblk
+
+LightGBM/XGBoost/CatBoost : ml algorithms gradient boosted transperency
+
+
