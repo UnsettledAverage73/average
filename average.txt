@@ -264,8 +264,728 @@ sudo swapon /swapfile
 
 make it perment
 
-iecho '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+caches not remained at the time installation librareies
+
+pip install --no-cache-dir torch --index-url ..............
+
+
+free more space :
+
+sudo apt clean
+
+sudo rm -rf /var/lib/apt/list/*
+
+sudo journalctl --vacuum-time=3d 
+
+rm -rf ~/.cache/pip 
+
+docker system prune -af --volumes
+
+torch lighter install:
+
+replace : torch 
+
+insted : torch==2.4.0+cpu torchvision --index-url https://download.pytorch.org/whl/cpu
+
+save 2-3 gb vs cuda build
+
+remove orphaned pockages
+
+sudo apt autoremove -y 
+
+solve npm error :
+
+sudo apt update
+sudo apt install -y nodejs npm
+
+Create Desktop app:
+
+./Cursor-1.3.9-x86_64.AppImage --no-sandbox
+
+1. put it in safe place
+
+mkdir -p ~/Applications/ 
+
+mv ~/Downloads/Cursor-1.3.9-x86_64.AppImage  ~/Applications/Cursor.AppImage
+
+chmod +x ~/Applications/Cursor.AppImage
+
+2. Create .desktop file
+
+nano ~/.local/share/applications/cursor.desktop
+
+[Desktop Entry]
+Name=Cursor
+Exec=/home/your-username/Applications/Cursor.AppImage --no-sandbox
+Icon=cursor
+Type=Application
+Categories=Development;IDE;
+StartupNotify=true
+Terminal=false
+
+add icon : 
+
+<BS>Icon=/home/your-username/.local/share/icons/cursor.python3-certbot-ngnix
+
+update-desktop-database ~/.local/share/applications 
+
+JWT : hold token based authentication
+
+axios/fetch : allow cookies : 
+
+axios.defaults.withCredentials = true;
+
+How to enable cors in fastapi
+
+from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  # 👈 must be True for cookies
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+Set HttpOnly cookie in Login
+
+@router.post("/login")
+def login(response: Response, username: str, password: str):
+    # validate user...
+    access_token = create_access_token({"sub": username})
+    refresh_token = create_refresh_token({"sub": username})
+
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,  # set True in prod with HTTPS
+        samesite="Lax"
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+Send cookies from fronted :
+
+await fetch("http://localhost:8000/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ username, password }),
+  credentials: "include" // 👈 critical
+});
+
+can't find the file @/lib/axiosInstance
+
+check file exists or not 
+
+// lib/axiosInstance.ts
+import axios from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default axiosInstance;
+
+check your tsconfig.json or jsconfig.json 
+
+@/ make sure set it up correctly
+
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+
+
+pnpm : alternative package installer of npm 
+
+when 
+
+pnpm install 
+
+regenerate pnpm-lock.yaml
+
+git add pnpm-lock.yaml
+
+
+for redeploy on render
+
+so build command : pnpm install && pnpm build
+
+module not found : 
+
+pnpm add module name
+
+this will be update package.json and pnpm-lock.yaml
+
+
+export like :
+
+export asyns function createReport(...) {...}
+
+test locally:
+
+pnpm dev
+
+if module not found in this direcly in fastapi 
+
+so you have also change 
+
+from backend.models.schemas import something
+
+to 
+
+from models.schemas import something
+
+motor : is use for AsyncIOMotorClient which is basically help to connect with mongodb
+
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+import gridfs
+
+app = FastAPI()
+
+# Connect Mongo
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client["lost_found"]
+fs = gridfs.GridFS(db)
+
+@app.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        # Read file content
+        content = await file.read()
+
+        # Save to GridFS
+        file_id = fs.put(content, filename=file.filename, content_type=file.content_type)
+
+        return {"file_id": str(file_id), "filename": file.filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+to insert into mongo :
+
+await 
+
+GridFS IDs : if you don't pass the GridFS IDs into photo_ids when creating the record, the schema will save but the iamges won't be linked.
+
+ifrom fastapi import FastAPI, UploadFile, File, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+import gridfs
+
+app = FastAPI()
+
+# connect to Mongo
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client["lost_found"]
+fs = gridfs.GridFS(db)
+
+@app.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        file_id = fs.put(content, filename=file.filename, content_type=file.content_type)
+        return {"file_id": str(file_id), "filename": file.filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+import gridfs
+
+app = FastAPI()
+
+# connect to Mongo
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client["lost_found"]
+fs = gridfs.GridFS(db)
+
+@app.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        file_id = fs.put(content, filename=file.filename, content_type=file.content_type)
+        return {"file_id": str(file_id), "filename": file.filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+import gridfs
+
+app = FastAPI()
+
+# connect to Mongo
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client["lost_found"]
+fs = gridfs.GridFS(db)
+
+@app.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        file_id = fs.put(content, filename=file.filename, content_type=file.content_type)
+        return {"file_id": str(file_id), "filename": file.filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+tree -I "__pycache__|venv"
+
+in .env 
+
+encoded 
+@ = %40
+, = %2c 
+
+mongosh : mongodb tool
+
+mongosh "mongodb+srv://lostdb.vgcbjxe.mongodb.net/lostdb" --username atharva
+
+Module not found: Can't resolve 'geist/font/sans'
+ 
+ npm install geist
+
+Error: Cannot find module '@tailwindcss/postcss'
+ 
+ npm install -D @tailwindcss/postcss
+
+npm install -D tailwindcss postcss autoprefixer @tailwindcss/postcss
+
+tailwindcss : tailwind css core 
+
+postcss : css processor
+
+autoprefixer : css vendor prefixer
+
+@tailwindcss/postcss : the adapter Next.js is trying to load
+
+check postcss.config.js 
+
+// postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+check tailwind.config.js 
+
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+
+rebuild
+
+npm run dev
+
+Vercel analytics isn't installed :
+
+import { Analytics } from "@vercel/analytics/next"
+
+npm install @vercel/analytics
+
+@layer base is used but no matching @tailwind base directive is present.
+
+TypeError: reports.slice is not a function
+
+1. inspect reports
+
+const reports = await getReports()
+
+install react v18
+
+npm install react@18 react-dom@18 
+
+Use --legacy-peer-deps force install 
+
+npm install react-loading-indicators --legacy-peer-deps
+
+supabase project : storage ----> buckets ----> policies 
+
+-- Allow authenticated users to upload
+create policy "Allow authenticated uploads"
+on storage.objects
+for insert
+to authenticated
+with check (bucket_id = 'your_bucket_name');
+
+-- Allow owner access
+create policy "Owner can read/write"
+on storage.objects
+for all
+to authenticated
+using (auth.uid() = owner)
+with check (auth.uid() = owner);
+
+Chatbot :
+
+gpt-4o-mini 
+
+RASA : os converstional AI 
+
+DialoGPT : finetune a small model 
+
+start command of uvicorn production ready :
+
+gunicorn -k unicorn.workers.UvicornWorker api.main:app -b 0.0.0.0:$port
+
+crunch : password generator
+
+Generate all combos of 4–6 characters using lowercase letteri<F11>oio<F12><F11>o
+crunch 4 6 abcdefghijklmnopqrstuvwxyz
+
+soundfile : PySoundFile depends on  libsndfile at the system level 
+
+pip install soundfile
+
+unzip : 
+
+unzip lf.zip -d fronted
+
+intall new version of npm 
+
+npm install -g npm@latest 
+
+
+xrandr : list connected monitor 
+
+xrandr --output HDMI-1 --auto --right-of eDP-1 (right to left)
+xrandr --output HDMI-1 --auto --left-of eDP-1 (left to right)
+xrandr --output HDMI-1 --mode 1366x768 --same-as eDP-1 (mirror)
+
+xrandr --output HDMI-1 --auto --primary --output eDP-1 --off (only external)
+
+Tor :
+
+sudo systemctl start tor 
+
+status 
+
+enable
+
+proxychains firefox 
+
+check wehat is using /dev/sdb
+
+sudo lsof /dev/sdb
+
+kill the process
+
+sudo kill -9 <pid> 
+
+ sudo umount -l /dev/sdb*
+
+sudo mkfs.vfat -F 32 /dev/sdb/
+
+
+sudo eject /dev/sdb 
+
+tell the kernel to drop all partitions
+
+sudo partprobe -s 
+
+forcefully :
+
+sudo partx -d --nr 1-3 /dev/sdb
+
+wipe the partitions table :
+
+sudo wipefs -a /dev/sdb
+
+try formating again :
+
+sudo mkfs.vfat -F 32 /dev/sdb
+
+Generate PAT :
+
+Personal access token github 
+
+github token page 
+
+git remote set-url origin https://unsettledaverage73@github.com/VedantDarokar/DroneClub_System.git
+
+git push origin main 
+
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+Solidity : it use to bitcoin 
+
+Perfect ⚡ Atharva, let’s set up a **Blockchain Dev Lab on Linux** step by step. This will give you a playground to:
+
+* Run a **Bitcoin full node**
+* Run an **Ethereum test blockchain**
+* Deploy & test **smart contracts**
+* Experiment with **mining, wallets, and transactions**
+
+---
+
+# 🖥️ **Step 1: System Prep**
+
+Open terminal & update system:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install curl git build-essential -y
+```
+
+You’ll need **Node.js** (for Hardhat/Truffle):
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+Check:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+# 🪙 **Step 2: Bitcoin Core Setup**
+
+Run your own Bitcoin node.
+
+```bash
+sudo apt install snapd -y
+sudo snap install bitcoin-core
+```
+
+Start node (testnet so you don’t waste disk space):
+
+```bash
+bitcoind -testnet -daemon
+```
+
+Check sync status:
+
+```bash
+bitcoin-cli -testnet getblockchaininfo
+```
+
+👉 You now have your own Bitcoin node syncing on **Testnet**. You can create addresses, send/receive fake BTC for dev purposes.
+
+---
+
+# ⛓️ **Step 3: Ethereum Node (Geth)**
+
+Install Geth:
+
+```bash
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt update
+sudo apt install ethereum -y
+```
+
+Run a local testnet node:
+
+```bash
+geth --http --dev --http.api eth,web3,personal,net,miner,txpool,debug console
+```
+
+👉 This launches an Ethereum dev chain. You can mine instantly, test transactions, and deploy smart contracts.
+
+---
+
+# ⚡ **Step 4: Local Blockchain for Dev (Ganache CLI)**
+
+Ganache lets you spin up a **personal Ethereum blockchain**.
+
+```bash
+npm install -g ganache
+ganache
+```
+
+It’ll print out:
+
+* 10 test accounts with ETH
+* Private keys
+* Local RPC endpoint ([http://127.0.0.1:8545](http://127.0.0.1:8545))
+
+👉 Use these accounts to deploy/test dApps without spending real ETH.
+
+---
+
+# 🔥 **Step 5: Smart Contract Development**
+
+### Install Hardhat
+
+```bash
+mkdir eth-lab && cd eth-lab
+npm init -y
+npm install --save-dev hardhat
+npx hardhat
+```
+
+Choose **“Create a basic project”**.
+
+Write a simple contract (in `contracts/Hello.sol`):
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Hello {
+    string public greet = "Hello, Blockchain!";
+}
+```
+
+Deploy on Ganache:
+
+```bash
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+👉 Congrats! You deployed your first smart contract.
+
+---
+
+# ⛏️ **Step 6: Mining Simulation**
+
+* On **Bitcoin Core (testnet)** → you can mine testnet blocks:
+
+```bash
+bitcoin-cli -testnet generate 1
+```
+
+* On **Geth dev mode** → blocks are mined instantly. You can send fake ETH between accounts & test gas fees.
+
+---
+
+# 🔐 **Step 7: Wallet Integration**
+
+Install **Electrum** for Bitcoin:
+
+```bash
+sudo apt install python3-pip -y
+pip install electrum
+```
+
+Install **Metamask** (browser extension) → connect it to Ganache or Geth RPC endpoint.
+
+👉 This way, you can **send transactions from wallets** → confirm them on your **nodes** → see them on blockchain explorers (local ones).
+
+---
+
+# 📊 **Step 8: Monitoring & Analysis**
+
+* Install **BlockSci** (for Bitcoin analytics).
+* Use **Grafana + Prometheus** to monitor your node performance.
+
+---
+
+⚡ End Result:
+You’ll have a **Linux Blockchain Lab** where you can:
+
+* Run Bitcoin & Ethereum nodes
+* Deploy smart contracts
+* Test mining & transactions
+* Integrate with wallets
+* Analyze blockchain data
+
+---
+
+👉 Do you want me to make you a **ready-made bash script** that sets up all these tools automatically on Linux (so you just run 1 command and get your blockchain dev lab)?
+
+
+qemu : is a enumerator to use run iso or makefile
+
+setup 
+sudo apt update
+
+sudo apt install qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager -y 
+
+sudo apt install qemu-system qemu-utils -y
+
+
+lsblk : list all storage devices
+
+create mount folders : 
+
+sudo mkdir /mnt/ssd 
+
+sudo mkdir /mnt/backup 
+
+mount the drivers :
+
+sudo mount /dev/sda2 /mnt/ssd 
+
+copy files : 
+
+sudo cp -r /mnt/ssd/Users/YourUsername/Documents /mnt/backup/
+sudo cp -r /mnt/ssd/Users/YourUsername/Pictures /mnt/backup/
+sudo cp -r /mnt/ssd/Users/YourUsername/Desktop /mnt/backup/
+
+safely unmount : 
+
+sudo umount /mnt/ssd
+sudo umount /mnt/backup
+
+format the pendrive : 
+
+sudo mkfs.vfat -F 32 /dev/sdb 
+
+ntfs : 
+
+sudo mkfs.ntfs /dev/sdb 
+
+ext4 :
+
+sudo mkfs.ext4 /dev/sdb
+
+start automount services :
+
+sudo systemctl start udisks2.services
+
+
+file import problem in google colab 
+
+1. upload files from your local system 
+
+from google.colab import files
+
+uploaded = files.upload() 
+
+mount google drive :
+
+from google.colab import drive 
+
+drive.mount('/content/drive')
+
+download file direcly from the web : 
+
+!wget "https://example.com/jajf.csv" -O data.csv 
 
 
 
